@@ -1,3 +1,4 @@
+from ast import expr_context
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
@@ -19,7 +20,8 @@ import shutil
 from cryptography.fernet import Fernet
 from threading import Thread
 
-APP_VERSION = '1.0.5'
+
+APP_VERSION = '1.1.9'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -28,8 +30,6 @@ community_site_dict = {}
 community_site_list = []
 work_account_list = []
 work_type_list=["상단업", "글쓰기"]
-
-loop_count = 0
 
 temp_subject = ''
 temp_content = ''
@@ -66,7 +66,7 @@ class SimpleEnDecrypt:
 				
 def getCommunitySite():
 	global community_site_dict
-	url = "https://marco6159.cafe24.com/site.php"
+	url = "http://marco.newsoft.kr/site.php"
 	res = session.get(url)
 	res.raise_for_status() # 문제시 프로그램 종료
 
@@ -88,14 +88,15 @@ def checkSession():
 	global ori_session
 
 	while True:
-		url = "https://marco6159.cafe24.com/index.php"
+		url = "http://marco.newsoft.kr/index.php"
 		res = session.get(url)
 		res.raise_for_status() # 문제시 프로그램 종료
 		res = res.json()
+		
 
 		if res["version"] != APP_VERSION:
 			messagebox.showerror("경고","프로그램을 업데이트 해주세요.")
-			sys.exit(0)
+			break
 	
 		if ori_session != res["session"]:
 			break
@@ -124,7 +125,7 @@ def macroLogin():
 		messagebox.showerror("경고","프로그램 비밀번호를 입력해주세요.")
 		return
 
-	url = "https://marco6159.cafe24.com/index.php"
+	url = "http://marco.newsoft.kr/index.php"
 	res = session.post(url, data=data)
 	res.raise_for_status() # 문제시 프로그램 종료
 	res = res.json()
@@ -286,6 +287,7 @@ def createDirectory(directory):
 	except OSError:
 		print("Error: Failed to create the directory.")
 
+
 class ItemUtil:
 	def __init__(self, item_name, file_name=None):
 		self.item_name = item_name
@@ -403,8 +405,8 @@ def exitBot():
 
 
 class CommunityMacro:
-	def __init__(self, driver, id, pw, site, type, reserve_at, subject, content):
-		global loop_count
+	def __init__(self, driver, id, pw, site, type, reserve_at, subject, content, is_first_loop):
+		global is_running
 		self.driver = driver
 		self.id = id
 		self.pw = SimpleEnDecrypt().decrypt(pw)
@@ -415,31 +417,33 @@ class CommunityMacro:
 		self.content = content
 		self.url = community_site_dict[self.site]
 		self.wait = WebDriverWait(self.driver, 20)
-
-		if self.reserve_at != 0:
-			if loop_count > 0:
-				d = datetime.today() + timedelta(days=1)
-				loop_count = 0
-			else:
-				d = datetime.today()
-			t = datetime.strptime(self.reserve_at, '%H:%M:%S').time()
-			self.reserves_at = datetime.combine(d, t)
-			
-			while True:
-				global is_running
-				if is_running:
-					now = datetime.now()
-					if self.reserves_at < now:
-						break
-				else:
-					break
-				time.sleep(1)
-				print(self.reserves_at)
+		self.is_first_loop = is_first_loop
 
 		try:
 			self.driver.switch_to.alert.accept()
 		except:
 			pass
+
+		if self.reserve_at != 0:
+			t = datetime.strptime(self.reserve_at, '%H:%M:%S').time()
+			d = datetime.today()
+
+			loop = True
+			loop_count = 0
+			while loop:
+				print(datetime.combine(d, t), datetime.now())
+				if datetime.combine(d, t) < datetime.now():
+					if self.is_first_loop and loop_count == 0:
+						return
+					else:
+						loop = False
+
+				if not is_running:
+					loop = False
+
+				loop_count += 1
+				time.sleep(1)
+					
 
 		if self.site == '펀초이스':
 			self.fun_choice()
@@ -449,8 +453,107 @@ class CommunityMacro:
 			self.busan_daliki()
 		elif self.site == '부산비비기':
 			self.busan_bibiki()
+		elif self.site == '알밤':
+			self.albam()
 
 		time.sleep(3)
+
+
+	def albam(self):
+		self.driver.get(f"{self.url}/index.php?mid=index&act=dispMemberLogout")
+
+
+		id_input = self.wait.until(
+			EC.visibility_of_element_located((By.XPATH, "//input[@name='user_id']"))
+		)
+		id_input.clear()
+		id_input.send_keys(self.id)
+
+		pw_input = self.wait.until(
+			EC.visibility_of_element_located((By.XPATH, "//input[@name='password']"))
+		)
+		pw_input.clear()
+		pw_input.send_keys(self.pw)
+		pw_input.send_keys(Keys.RETURN)
+
+		
+		if self.type == '상단업':
+			saveLog(self.site, '지원하지 않습니다.')
+			
+		elif self.type == '글쓰기':
+			try:
+				self.driver.get(self.url+"/index.php?mid=board_tlDj69&act=dispBoardWrite")
+				
+				try:
+					self.driver.switch_to.alert.dismiss()
+				except:
+					pass
+
+				#분류
+				self.wait.until(
+					EC.visibility_of_element_located((By.XPATH, "//select[@name='category_srl']/option[contains(text(),'구인')]"))
+				).click()
+				
+				#제목
+				subject_elem = self.wait.until(
+					EC.visibility_of_element_located((By.XPATH, "//*[@id='postTitle']"))
+				)
+				subject_elem.clear()
+				subject_elem.send_keys(self.subject)
+
+				#내용
+				driver.find_element(By.XPATH, "//*[@id='xe-fileupload']").send_keys(os.path.abspath(self.content))
+				time.sleep(5)
+
+
+				
+
+				while True:
+					time.sleep(1)
+					submit_btn = self.wait.until(
+						EC.visibility_of_element_located((By.XPATH, "//*[@id='bd']/form/div[5]/input[2]"))
+					)
+					driver.execute_script("arguments[0].click();", submit_btn)
+					self.driver.switch_to.default_content()
+					time.sleep(2)
+
+					#캡차
+					captcha_img = self.driver.find_element(By.XPATH, "//*[@id='captcha_image']").screenshot_as_png
+					url = 'http://captcha.newsoft.kr/'
+					files = {'file': captcha_img}
+					res = requests.post(url, files=files)
+					res.raise_for_status() # 문제시 프로그램 종료
+					res = res.json()
+
+					captcha_elem = self.wait.until(
+						EC.visibility_of_element_located((By.XPATH, '//*[@id="secret_text"]'))
+					)
+					captcha_elem.clear()
+					captcha_elem.send_keys(res['captcha'])
+					captcha_elem.send_keys(Keys.RETURN)
+					time.sleep(1)
+					
+					try:
+						driver.switch_to.alert.accept()
+					except:
+						url = 'http://captcha.newsoft.kr/res/'
+						data = {
+							'filename':res['filename'],
+							"captcha":res['captcha'], 
+						}
+
+						res = requests.post(url, json=data)
+						res = res.json()
+						break
+
+
+				saveLog(self.site, '글쓰기에 성공하였습니다.')
+			except Exception as e:
+				print(e)
+				saveLog(self.site, '글쓰기에 실패하였습니다.')
+
+
+	
 
 	def fun_choice(self):
 		self.driver.get(self.url)
@@ -734,6 +837,88 @@ class CommunityMacro:
 			except:
 				saveLog(self.site, '글쓰기에 실패하였습니다.')
 
+
+
+	def op_guide(self):
+		self.driver.get(self.url+"/bbs/logout.php")
+		self.driver.get(self.url+"/bbs/login.php")
+
+
+		id_input =self.wait.until(
+			EC.visibility_of_element_located((By.XPATH, "//input[@id='login_id']"))
+		)
+		id_input.clear()
+		id_input.send_keys(self.id)
+
+		pw_input = self.wait.until(
+			EC.visibility_of_element_located((By.XPATH, "//input[@id='login_pw']"))
+		)
+		pw_input.clear()
+		pw_input.send_keys(self.pw)
+		pw_input.send_keys(Keys.RETURN)
+		
+	
+		if self.type == '상단업':
+			try:
+				self.driver.execute_script('cmpJump()')
+				
+				saveLog(self.site, '제휴 상단업에 성공하였습니다.')
+			except:
+				saveLog(self.site, '제휴 상단업에 실패하였습니다.')
+			time.sleep(0.5)
+
+			try:
+				self.driver.switch_to.alert.accept()
+			except:
+				pass
+
+				
+			
+		elif self.type == '글쓰기':
+			self.driver.get(self.url+"/bbs/write.php?bo_table=recruit")
+
+			
+			try:
+				#분류
+				self.wait.until(
+					EC.visibility_of_element_located((By.XPATH, "//*[@id='ca_name']/option[contains(text(),'구인')]"))
+				).click()
+				
+				#제목
+				subject_elem = self.wait.until(
+					EC.visibility_of_element_located((By.XPATH, "//*[@id='wr_subject']"))
+				)
+				subject_elem.clear()
+				subject_elem.send_keys(self.subject)
+
+				#내용
+				frame = self.wait.until(
+					EC.visibility_of_element_located((By.XPATH, "//div[@class='cheditor-editarea-wrapper']/iframe"))
+				)
+				self.driver.switch_to.frame(frame)
+
+				content_elem = self.wait.until(
+					EC.visibility_of_element_located((By.XPATH, "/html/body"))
+				)
+				content_elem.clear()
+				content_elem.send_keys(".")
+				self.driver.switch_to.default_content()
+
+				#파일
+				driver.find_element(By.XPATH, "//*[@name='bf_file[]']").send_keys(os.path.abspath(self.content))
+				time.sleep(5)
+
+				submit_btn = self.wait.until(
+					EC.visibility_of_element_located((By.XPATH, "//*[@id='btn_submit']"))
+				)
+				driver.execute_script("arguments[0].click();", submit_btn)
+
+				saveLog(self.site, '글쓰기에 성공하였습니다.')
+			except:
+				saveLog(self.site, '글쓰기에 실패하였습니다.')
+
+
+
 	def busan_bibiki(self):
 		self.driver.get(self.url)
 
@@ -859,7 +1044,6 @@ class CommunityMacro:
 
 				saveLog(self.site, '글쓰기에 성공하였습니다.')
 			except:
-				print(e)
 				saveLog(self.site, '글쓰기에 실패하였습니다.')
 
 
@@ -877,9 +1061,7 @@ def stopBot():
 
 		
 def startBotThread():
-	global loop_count
-	loop_count = 0
-	
+	is_first_loop = True
 	while True:
 		for work in reversed(work_list.get_children()):
 			global is_running
@@ -890,6 +1072,7 @@ def startBotThread():
 				work_site = row[2]
 				work_type = row[1]
 				work_reserve = row[5]
+				
 				try:
 					work_subject = row[6]
 					work_content = row[7]
@@ -897,18 +1080,22 @@ def startBotThread():
 					work_subject = None
 					work_content = None
 				
-				
+								
 				try:
-					CommunityMacro(driver, work_id, work_pw, work_site, work_type, work_reserve, work_subject, work_content)
-				except:
+					CommunityMacro(driver, work_id, work_pw, work_site, work_type, work_reserve, work_subject, work_content, is_first_loop)
+				except Exception as e:
+					print(e)
 					saveLog(work_site, '실패했습니다.')
+											
 			else:
 				break
 
 		if not is_loop.get():
 			break
-		else:
-			loop_count += 1
+
+		is_first_loop = False
+
+			
 	
 	
 	is_running = False
@@ -945,7 +1132,7 @@ if __name__ == "__main__":
 
 
 	#공지사항 시작
-	url = "https://marco6159.cafe24.com/notice.php"
+	url = "http://marco.newsoft.kr/notice.php"
 	res = session.get(url)
 	res.raise_for_status() # 문제시 프로그램 종료
 	notice = res.text
@@ -1156,4 +1343,3 @@ if __name__ == "__main__":
 
 	#작동 프레임 끝
 	root.mainloop()
-

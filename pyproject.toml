@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "커뮤니티 글쓰기 매크로"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+undetected-chromedriver = "^3.1.5.post4"
+chromedriver-autoinstaller = "^0.4.0"
+cryptography = "^38.0.1"
+sklearn = "^0.0.post1"
+opencv-python = "3.4.10.37"
+matplotlib = "3.5"
+tensorflow = "2.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
