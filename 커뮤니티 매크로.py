@@ -21,7 +21,7 @@ from cryptography.fernet import Fernet
 from threading import Thread
 
 
-APP_VERSION = '1.2.1'
+APP_VERSION = '1.2.2'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -811,6 +811,12 @@ class CommunityMacro:
 				self.driver.get(self.url+"/index.php?mid=comm_cross&act=dispBoardWrite")
 
 			try:
+				#분류
+				print()
+				self.wait.until(
+					EC.visibility_of_element_located((By.XPATH, "//select[@name='category_srl']/option[contains(text(),'구인')]"))
+				).click()
+
 				#제목
 				subject_elem = self.wait.until(
 					EC.visibility_of_element_located((By.XPATH, "//*[@id='postTitle']"))
