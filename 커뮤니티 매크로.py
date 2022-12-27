@@ -455,6 +455,8 @@ class CommunityMacro:
 			self.busan_bibiki()
 		elif self.site == '알밤':
 			self.albam()
+		elif self.site == '오피가이드':
+			self.op_guide()
 
 		time.sleep(3)
 
