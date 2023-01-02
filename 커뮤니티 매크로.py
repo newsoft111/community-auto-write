@@ -21,7 +21,7 @@ from cryptography.fernet import Fernet
 from threading import Thread
 
 
-APP_VERSION = '1.2.2'
+APP_VERSION = '1.2.3'
 is_running = False
 session = requests.session()
 ori_session = ''
