@@ -1119,6 +1119,7 @@ if __name__ == "__main__":
 
 
 	driver = uc.Chrome(options=options,version_main=chrome_ver,use_subprocess=True)
+
 	driver.set_window_size(random.uniform(993,1300), random.uniform(700,1000))
 	
 	root=Tk()

@@ -287,7 +287,7 @@ testing = ["flake8 (<5)", "flufl.flake8", "importlib-resources (>=1.3)", "packag
 
 [[package]]
 name = "keras-nightly"
-version = "2.6.0.dev2021062500"
+version = "2.5.0.dev2021032900"
 description = "TensorFlow Keras."
 category = "main"
 optional = false
@@ -562,6 +562,20 @@ certifi = ">=2021.10.8"
 trio = ">=0.17,<1.0"
 trio-websocket = ">=0.9,<1.0"
 urllib3 = {version = ">=1.26,<2.0", extras = ["socks"]}
+
+[[package]]
+name = "selenium-stealth"
+version = "1.0.6"
+description = "Trying to make python selenium more stealthy."
+category = "main"
+optional = false
+python-versions = ">=3, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+
+[package.dependencies]
+selenium = "*"
+
+[package.extras]
+test = ["pytest"]
 
 [[package]]
 name = "setuptools"
@@ -854,7 +868,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "e9a2f04bc67a25cefd73c0e6e09e273ceb1d9bc1d34f6ff819e2093153eada08"
+content-hash = "3926a01314489857de0098e1cd391cff38f3dd1a540926304865ab404fb31568"
 
 [metadata.files]
 absl-py = [
@@ -1096,7 +1110,7 @@ importlib-metadata = [
     {file = "importlib_metadata-5.0.0.tar.gz", hash = "sha256:da31db32b304314d044d3c12c79bd59e307889b287ad12ff387b3500835fc2ab"},
 ]
 keras-nightly = [
-    {file = "keras_nightly-2.6.0.dev2021062500-py2.py3-none-any.whl", hash = "sha256:a2d4808c9a1e97922d54be768112b01c18141aa9a413b2dc37384edd49a78116"},
+    {file = "keras_nightly-2.5.0.dev2021032900-py2.py3-none-any.whl", hash = "sha256:6ba70f738f4008222de7e7fdd5b2b18c48c49b897a9fca54c844854e25964011"},
 ]
 keras-preprocessing = [
     {file = "Keras_Preprocessing-1.1.2-py2.py3-none-any.whl", hash = "sha256:7b82029b130ff61cc99b55f3bd27427df4838576838c5b2f65940e4fcec99a7b"},
@@ -1456,6 +1470,9 @@ rsa = [
 ]
 selenium = [
     {file = "selenium-4.5.0-py3-none-any.whl", hash = "sha256:a733dd77d3171b846893f4d51b18967d809313f547a10974e26579f9ce797462"},
+]
+selenium-stealth = [
+    {file = "selenium_stealth-1.0.6-py3-none-any.whl", hash = "sha256:b62da5452aa4a84f29a4dfb21a9696aff20788a7c570dd0b81bc04a940848b97"},
 ]
 setuptools = [
     {file = "setuptools-65.5.1-py3-none-any.whl", hash = "sha256:d0b9a8433464d5800cbe05094acf5c6d52a91bfac9b52bcfc4d41382be5d5d31"},
