@@ -21,7 +21,7 @@ from cryptography.fernet import Fernet
 from threading import Thread
 
 
-APP_VERSION = '1.2.3'
+APP_VERSION = '1.2.5'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -843,6 +843,7 @@ class CommunityMacro:
 
 	def op_guide(self):
 		self.driver.get(self.url+"/bbs/logout.php")
+		time.sleep(1)
 		self.driver.get(self.url+"/bbs/login.php")
 
 
@@ -857,6 +858,7 @@ class CommunityMacro:
 		)
 		pw_input.clear()
 		pw_input.send_keys(self.pw)
+		time.sleep(6)
 		pw_input.send_keys(Keys.RETURN)
 		
 	
@@ -1113,6 +1115,8 @@ if __name__ == "__main__":
 	options.add_argument('--ignore-ssl-errors=yes')
 	options.add_argument('--ignore-certificate-errors')
 	options.add_argument("--incognito")
+	options.add_argument('--disable-blink-features=AutomationControlled')
+
 
 	driver = uc.Chrome(options=options,version_main=chrome_ver,use_subprocess=True)
 	driver.set_window_size(random.uniform(993,1300), random.uniform(700,1000))
