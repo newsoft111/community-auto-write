@@ -19,9 +19,10 @@ from functools import partial
 import shutil
 from cryptography.fernet import Fernet
 from threading import Thread
+from bs4 import BeautifulSoup
 
 
-APP_VERSION = '1.2.5'
+APP_VERSION = '1.2.6'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -483,6 +484,22 @@ class CommunityMacro:
 			saveLog(self.site, '지원하지 않습니다.')
 			
 		elif self.type == '글쓰기':
+			#나의 프로필 이미지 가져와서 1페이지에 글 있는지 확인
+			self.driver.get(self.url+"/board_tlDj69")
+			html = self.driver.page_source
+
+			
+
+			# soup에 넣어주기
+			soup = BeautifulSoup(html, 'html.parser')
+			my_profile_img = soup.find("div", { "class" : "wrap_userName" }).find_all("img")[1]
+			
+			for image in soup.find("div", { "class" : "bd_lst_wrp" }).find_all("img"):
+				if my_profile_img['src'] == image['src']:
+					saveLog(self.site, '1페이지 안에 글이 있습니다.')
+					return 
+
+
 			try:
 				self.driver.get(self.url+"/index.php?mid=board_tlDj69&act=dispBoardWrite")
 				

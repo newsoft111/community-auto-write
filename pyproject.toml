@@ -16,6 +16,7 @@ matplotlib = "3.5"
 tensorflow = "2.5"
 selenium-stealth = "^1.0.6"
 keras-nightly = "2.5.0.dev2021032900"
+beautifulsoup4 = "^4.11.1"
 
 
 [build-system]
