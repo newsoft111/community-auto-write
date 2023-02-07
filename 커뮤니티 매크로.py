@@ -519,7 +519,14 @@ class CommunityMacro:
 				)
 				subject_elem.clear()
 				subject_elem.send_keys(self.subject)
+				
 
+				try:
+					driver.execute_script("jQuery.fancybox.close(); setCookie('lpopup', 'no',1);")
+				except:
+					pass
+
+				
 				#내용
 				driver.find_element(By.XPATH, "//*[@id='xe-fileupload']").send_keys(os.path.abspath(self.content))
 				time.sleep(5)
