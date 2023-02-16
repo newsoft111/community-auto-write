@@ -22,7 +22,7 @@ from threading import Thread
 from bs4 import BeautifulSoup
 
 
-APP_VERSION = '1.2.6'
+APP_VERSION = '1.2.7'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -481,7 +481,27 @@ class CommunityMacro:
 
 		
 		if self.type == '상단업':
-			saveLog(self.site, '지원하지 않습니다.')
+			try:
+				self.driver.get(f"{self.url}/index.php?mid=index&act=dispMemberOwnDocument")
+
+				links = [link.get_attribute('href') for link in self.driver.find_elements(By.XPATH, "//section[@class='xm']//td[@class='title']//a")]
+
+
+				for link in links:
+					self.driver.get(link)
+
+					elements = self.driver.find_elements(By.XPATH, "//a[contains(text(),'상단점프')]")
+					if elements:
+						elements[0].click()
+						break
+				
+				time.sleep(0.5)
+				self.driver.switch_to.alert.accept()
+
+				saveLog(self.site, '상단업에 성공하였습니다.')
+			except Exception as e:
+				print(e)
+				saveLog(self.site, '상단업에 실패하였습니다.')
 			
 		elif self.type == '글쓰기':
 			#나의 프로필 이미지 가져와서 1페이지에 글 있는지 확인
