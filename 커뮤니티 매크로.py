@@ -22,7 +22,7 @@ from threading import Thread
 from bs4 import BeautifulSoup
 
 
-APP_VERSION = '1.2.7'
+APP_VERSION = '1.2.8'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -93,6 +93,7 @@ def checkSession():
 		res = session.get(url)
 		res.raise_for_status() # 문제시 프로그램 종료
 		res = res.json()
+		print(res["session"])
 		
 
 		if res["version"] != APP_VERSION:
@@ -101,7 +102,7 @@ def checkSession():
 	
 		if ori_session != res["session"]:
 			break
-		time.sleep(60)
+		time.sleep(5)
 	exitBot()
 	
 	
