@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(
-    ['d:\\프로그램소스\\community-auto-write\\커뮤니티 매크로.py'],
+    ['c:\\Users\\Administrator\\Desktop\\community-auto-write\\커뮤니티 매크로.py'],
     pathex=[],
     binaries=[],
     datas=[],
@@ -35,11 +35,11 @@ exe = EXE(
     upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=False,
+    console=True,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['d:\\프로그램소스\\community-auto-write\\icon.ico'],
+    icon=['c:\\Users\\Administrator\\Desktop\\community-auto-write\\icon.ico'],
 )
