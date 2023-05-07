@@ -990,13 +990,13 @@ files = [
 
 [[package]]
 name = "undetected-chromedriver"
-version = "3.2.1"
+version = "3.4.6"
 description = "('Selenium.webdriver.Chrome replacement with compatiblity for Brave, and other Chromium based browsers.', 'Not triggered by CloudFlare/Imperva/hCaptcha and such.', 'NOTE: results may vary due to many factors. No guarantees are given, except for ongoing efforts in understanding detection algorithms.')"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "undetected-chromedriver-3.2.1.tar.gz", hash = "sha256:3fe5b6e75b7170efa2f4c53e74bc68ba01d62a30c1a2a5773227fbdd9717d1d8"},
+    {file = "undetected-chromedriver-3.4.6.tar.gz", hash = "sha256:871485624f7a2e1c15fde75ab7b8ceb30ebc06dad90cd66173ea8036c046367f"},
 ]
 
 [package.dependencies]
@@ -1116,4 +1116,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "e635f91556b93f96e48882e05e16ebc89c054de89eb21ce4fe466f4eeefe7d24"
+content-hash = "2ad9df7b818d66033d29994ed39fcadd131782ac4d51deac1080f905a311d6e5"

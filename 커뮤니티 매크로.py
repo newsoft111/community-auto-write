@@ -1,10 +1,9 @@
-from ast import expr_context
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
 import tkinter.font as tkFont
 from tkinter import messagebox
-import undetected_chromedriver.v2 as uc
+import undetected_chromedriver as uc
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -22,7 +21,7 @@ from threading import Thread
 from bs4 import BeautifulSoup
 
 
-APP_VERSION = '13'
+APP_VERSION = '0.14'
 is_running = False
 session = requests.session()
 ori_session = ''
