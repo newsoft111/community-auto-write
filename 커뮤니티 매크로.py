@@ -21,7 +21,7 @@ from threading import Thread
 from bs4 import BeautifulSoup
 
 
-APP_VERSION = '0.14'
+APP_VERSION = '0.15'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -92,7 +92,6 @@ def checkSession():
 		res = session.get(url)
 		res.raise_for_status() # 문제시 프로그램 종료
 		res = res.json()
-		print(res["session"])
 		
 
 		if res["version"] != APP_VERSION:
@@ -444,7 +443,9 @@ class CommunityMacro:
 
 				loop_count += 1
 				time.sleep(1)
-					
+			
+
+		
 
 		if self.site == '펀초이스':
 			self.fun_choice()
@@ -465,6 +466,10 @@ class CommunityMacro:
 	def albam(self):
 		self.driver.get(f"{self.url}/index.php?mid=index&act=dispMemberLogout")
 
+		try:
+			self.click_verify()
+		except:
+			pass
 
 		id_input = self.wait.until(
 			EC.visibility_of_element_located((By.XPATH, "//input[@name='user_id']"))
@@ -605,6 +610,11 @@ class CommunityMacro:
 		self.driver.get(self.url)
 
 		try:
+			self.click_verify()
+		except:
+			pass
+
+		try:
 			logout_btn = self.wait.until(
 				EC.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div/div[3]/div[1]/div[1]/div/form/fieldset/div/div[1]/div[1]/p[2]'))
 			)
@@ -663,6 +673,11 @@ class CommunityMacro:
 
 	def busan_saliki(self):
 		self.driver.get(self.url)
+
+		try:
+			self.click_verify()
+		except:
+			pass
 
 		try:
 			driver.execute_script("""
@@ -766,6 +781,11 @@ class CommunityMacro:
 
 	def busan_daliki(self):
 		self.driver.get(self.url+"/index.php?act=dispMemberLoginForm")
+
+		try:
+			self.click_verify()
+		except:
+			pass
 
 		try:
 			logout_btn = self.wait.until(
@@ -1082,17 +1102,40 @@ class CommunityMacro:
 				self.driver.switch_to.default_content()
 
 				#파일
-				driver.find_element(By.XPATH, "//*[@id='fwriteFile0']").send_keys(os.path.abspath(self.content))
+				self.driver.find_element(By.XPATH, "//*[@id='fwriteFile0']").send_keys(os.path.abspath(self.content))
 				time.sleep(5)
 
 				submit_btn = self.wait.until(
 					EC.visibility_of_element_located((By.XPATH, "//*[@id='btn_submit']"))
 				)
-				driver.execute_script("arguments[0].click();", submit_btn)
+				self.driver.execute_script("arguments[0].click();", submit_btn)
 
 				saveLog(self.site, '글쓰기에 성공하였습니다.')
 			except:
 				saveLog(self.site, '글쓰기에 실패하였습니다.')
+	
+
+	def click_verify(self):
+		time.sleep(10)
+
+		try:
+			iframe = self.wait.until(
+				EC.visibility_of_element_located((By.XPATH, "//iframe[@title='Widget containing a Cloudflare security challenge']"))
+			)
+			self.driver.switch_to.frame(iframe)
+			checkbox = self.driver.find_element(
+				By.XPATH, '//*[@id="cf-stage"]//*[@id="challenge-stage"]/div/label/span[2]',
+			)
+
+			if checkbox:
+				checkbox.click()
+
+		except Exception as e:
+			print(e)
+		finally:
+			self.driver.switch_to.default_content()
+		time.sleep(10)
+		
 
 
 def startBot():
@@ -1155,12 +1198,8 @@ def startBotThread():
 if __name__ == "__main__":
 	chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]
 
-	options = webdriver.ChromeOptions() 
-	options.add_argument('--ignore-ssl-errors=yes')
-	options.add_argument('--ignore-certificate-errors')
-	options.add_argument("--incognito")
-	options.add_argument('--disable-blink-features=AutomationControlled')
 
+	options = webdriver.ChromeOptions() 
 
 	driver = uc.Chrome(options=options,version_main=chrome_ver,use_subprocess=True)
 
