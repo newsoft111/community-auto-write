@@ -21,7 +21,7 @@ from threading import Thread
 from bs4 import BeautifulSoup
 
 
-APP_VERSION = '0.15'
+APP_VERSION = '0.17'
 is_running = False
 session = requests.session()
 ori_session = ''
