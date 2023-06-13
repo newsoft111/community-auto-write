@@ -21,7 +21,7 @@ from threading import Thread
 from bs4 import BeautifulSoup
 
 
-APP_VERSION = '0.17'
+APP_VERSION = '0.19'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -1075,6 +1075,11 @@ class CommunityMacro:
 				self.driver.get(self.url+"/bbs/write.php?bo_table=c_job")
 
 			try:
+				#분류
+				self.wait.until(
+					EC.visibility_of_element_located((By.XPATH, "//select[@name='ca_name']/option[contains(text(),'매니져')]"))
+				).click()
+
 				#제목
 				subject_elem = self.wait.until(
 					EC.visibility_of_element_located((By.XPATH, "//*[@id='wr_subject']"))
@@ -1082,10 +1087,10 @@ class CommunityMacro:
 				subject_elem.clear()
 				subject_elem.send_keys(self.subject)
 
-				#내용
+
 				#내용
 				frame = self.wait.until(
-					EC.visibility_of_element_located((By.XPATH, "//*[@id='fwrite']/ul/li[4]/iframe"))
+					EC.visibility_of_element_located((By.XPATH, "//*[@id='fwrite']/ul/li[5]/iframe"))
 				)
 				self.driver.switch_to.frame(frame)
 
