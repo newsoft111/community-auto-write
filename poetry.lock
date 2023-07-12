@@ -347,17 +347,17 @@ use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
 name = "selenium"
-version = "4.5.0"
+version = "4.9.1"
 description = ""
 category = "main"
 optional = false
-python-versions = "~=3.7"
+python-versions = ">=3.7"
 
 [package.dependencies]
 certifi = ">=2021.10.8"
 trio = ">=0.17,<1.0"
 trio-websocket = ">=0.9,<1.0"
-urllib3 = {version = ">=1.26,<2.0", extras = ["socks"]}
+urllib3 = {version = ">=1.26,<3", extras = ["socks"]}
 
 [[package]]
 name = "selenium-stealth"
@@ -494,7 +494,7 @@ python-versions = "*"
 
 [[package]]
 name = "undetected-chromedriver"
-version = "3.4.6"
+version = "3.5.0"
 description = "('Selenium.webdriver.Chrome replacement with compatiblity for Brave, and other Chromium based browsers.', 'Not triggered by CloudFlare/Imperva/hCaptcha and such.', 'NOTE: results may vary due to many factors. No guarantees are given, except for ongoing efforts in understanding detection algorithms.')"
 category = "main"
 optional = false
@@ -502,7 +502,7 @@ python-versions = "*"
 
 [package.dependencies]
 requests = "*"
-selenium = ">=4.0.0"
+selenium = ">=4.9.0"
 websockets = "*"
 
 [[package]]
@@ -555,7 +555,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "a6848fd1ee98d3fa3521918aa7969b6515cde7963678d07c12028f4f4c0048cc"
+content-hash = "a463bdcd36f75dd47221b9d68e844d5db4450121b4e7d8e02a90e6463b2bb693"
 
 [metadata.files]
 async_generator = [
@@ -1047,7 +1047,8 @@ requests = [
     {file = "requests-2.28.2.tar.gz", hash = "sha256:98b1b2782e3c6c4904938b84c0eb932721069dfdb9134313beff7c83c2df24bf"},
 ]
 selenium = [
-    {file = "selenium-4.5.0-py3-none-any.whl", hash = "sha256:a733dd77d3171b846893f4d51b18967d809313f547a10974e26579f9ce797462"},
+    {file = "selenium-4.9.1-py3-none-any.whl", hash = "sha256:82aedaa85d55bc861f4c89ff9609e82f6c958e2e1e3da3ffcc36703f21d3ee16"},
+    {file = "selenium-4.9.1.tar.gz", hash = "sha256:3444f4376321530c36ce8355b6b357d8cf4a7d588ce5cf772183465930bbed0e"},
 ]
 selenium-stealth = [
     {file = "selenium_stealth-1.0.6-py3-none-any.whl", hash = "sha256:b62da5452aa4a84f29a4dfb21a9696aff20788a7c570dd0b81bc04a940848b97"},
@@ -1097,7 +1098,7 @@ typing-extensions = [
     {file = "typing_extensions-3.7.4.3.tar.gz", hash = "sha256:99d4073b617d30288f569d3f13d2bd7548c3a7e4c8de87db09a9d29bb3a4a60c"},
 ]
 undetected-chromedriver = [
-    {file = "undetected-chromedriver-3.4.6.tar.gz", hash = "sha256:871485624f7a2e1c15fde75ab7b8ceb30ebc06dad90cd66173ea8036c046367f"},
+    {file = "undetected-chromedriver-3.5.0.tar.gz", hash = "sha256:355bfc5bc78800795a9a49ef2a1199402d461483f6c0efd7bd7a85809464df6c"},
 ]
 urllib3 = [
     {file = "urllib3-1.26.12-py2.py3-none-any.whl", hash = "sha256:b930dd878d5a8afb066a637fbb35144fe7901e3b209d1cd4f524bd0e9deee997"},
