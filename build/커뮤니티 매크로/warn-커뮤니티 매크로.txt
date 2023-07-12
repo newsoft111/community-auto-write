@@ -68,7 +68,6 @@ missing module named 'setuptools.extern.more_itertools' - imported by setuptools
 missing module named 'setuptools.extern.packaging.version' - imported by setuptools.config.setupcfg (top-level), setuptools.msvc (top-level)
 missing module named 'setuptools.extern.packaging.utils' - imported by setuptools.wheel (top-level)
 missing module named 'setuptools.extern.packaging.tags' - imported by setuptools.wheel (top-level)
-missing module named trove_classifiers - imported by setuptools.config._validate_pyproject.formats (optional)
 missing module named 'setuptools.extern.packaging.specifiers' - imported by setuptools.config.setupcfg (top-level), setuptools.config._apply_pyprojecttoml (delayed)
 missing module named 'setuptools.extern.packaging.requirements' - imported by setuptools.config.setupcfg (top-level)
 missing module named 'importlib.metadata' - imported by websockets.version (delayed, conditional, optional), setuptools._importlib (conditional)

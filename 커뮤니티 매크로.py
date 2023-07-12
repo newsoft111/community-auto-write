@@ -21,7 +21,7 @@ from threading import Thread
 from bs4 import BeautifulSoup
 
 
-APP_VERSION = '0.19'
+APP_VERSION = '0.20'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -1046,19 +1046,9 @@ class CommunityMacro:
 				pass
 
 		elif self.type == '글쓰기':
-			self.driver.get(self.url+"/bbs/write.php?bo_table=c_job")
-
 			try:
-				self.wait.until(EC.alert_is_present())
-				self.driver.switch_to.alert.accept()
-        
-				is_written = True
-			except:
-				is_written = False
-
-			if is_written:
 				self.driver.get(self.url+"/bbs/mypost.php")
-				self.driver.find_elements(By.XPATH, "//*[@id='new_list']/ul/li/div/a[text()='구인']/parent::*/preceding-sibling::div[3]/child::div/child::div/child::a")[0].click()
+				self.driver.find_elements(By.XPATH, "//*[@id='new_list']/ul/li[1]/div[5]/a[text()='구인(매니져/실장)']/parent::*/preceding-sibling::div[3]/child::div/child::div/child::a")[0].click()
 				
 				self.wait.until(
 					EC.visibility_of_element_located((By.XPATH, "//*[@id='bo_v_btn']/div/button"))
@@ -1071,10 +1061,13 @@ class CommunityMacro:
 				).click()
 				time.sleep(0.5)
 				self.driver.switch_to.alert.accept()
-
-				self.driver.get(self.url+"/bbs/write.php?bo_table=c_job")
+			except:
+				pass
 
 			try:
+				self.driver.get(self.url+"/bbs/write.php?bo_table=c_job")
+
+				
 				#분류
 				self.wait.until(
 					EC.visibility_of_element_located((By.XPATH, "//select[@name='ca_name']/option[contains(text(),'매니져')]"))
