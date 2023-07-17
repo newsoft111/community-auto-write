@@ -21,7 +21,7 @@ from threading import Thread
 from bs4 import BeautifulSoup
 
 
-APP_VERSION = '0.20'
+APP_VERSION = '0.21'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -1135,7 +1135,7 @@ class CommunityMacro:
 			print(e)
 		finally:
 			self.driver.switch_to.default_content()
-		time.sleep(10)
+		time.sleep(5)
 		
 
 
@@ -1200,7 +1200,10 @@ if __name__ == "__main__":
 	chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]
 
 
-	options = webdriver.ChromeOptions() 
+	options = webdriver.ChromeOptions()
+	options.add_argument('--incognito') # incognito 시크릿 모드입니다.
+	options.add_argument("--auto-open-devtools-for-tabs")
+
 	
 	driver = uc.Chrome(options=options,version_main=chrome_ver,use_subprocess=True)
 
