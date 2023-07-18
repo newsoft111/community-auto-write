@@ -21,7 +21,7 @@ from threading import Thread
 from bs4 import BeautifulSoup
 
 
-APP_VERSION = '0.21'
+APP_VERSION = '0.22'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -990,7 +990,11 @@ class CommunityMacro:
 	def busan_bibiki(self):
 		self.driver.get(self.url)
 
-		time.sleep(10)
+		try:
+			self.click_verify()
+		except:
+			pass
+
 		try:
 			logout_btn = self.wait.until(
 				EC.visibility_of_element_located((By.XPATH, '//*[@id="nt_body"]/div/div/div[2]/div[1]/div/div[2]/a[4]'))
