@@ -464,12 +464,11 @@ class CommunityMacro:
 
 
 	def albam(self):
-		self.driver.get(f"{self.url}/index.php?mid=index&act=dispMemberLogout")
-
-		try:
-			self.click_verify()
-		except:
-			pass
+		if not self.click_verify(f"{self.url}/index.php?mid=index&act=dispMemberLogout"):
+			saveLog(self.site, '로봇체크를 우회하지 못했습니다.')
+			raise
+		
+		
 
 		id_input = self.wait.until(
 			EC.visibility_of_element_located((By.XPATH, "//input[@name='user_id']"))
@@ -607,12 +606,9 @@ class CommunityMacro:
 	
 
 	def fun_choice(self):
-		self.driver.get(self.url)
-
-		try:
-			self.click_verify()
-		except:
-			pass
+		if not self.click_verify(self.url):
+			saveLog(self.site, '로봇체크를 우회하지 못했습니다.')
+			raise
 
 		try:
 			logout_btn = self.wait.until(
@@ -672,12 +668,9 @@ class CommunityMacro:
 
 
 	def busan_saliki(self):
-		self.driver.get(self.url)
-
-		try:
-			self.click_verify()
-		except:
-			pass
+		if not self.click_verify(self.url):
+			saveLog(self.site, '로봇체크를 우회하지 못했습니다.')
+			raise
 
 		try:
 			driver.execute_script("""
@@ -780,12 +773,9 @@ class CommunityMacro:
 
 
 	def busan_daliki(self):
-		self.driver.get(self.url+"/index.php?act=dispMemberLoginForm")
-
-		try:
-			self.click_verify()
-		except:
-			pass
+		if not self.click_verify(self.url+"/index.php?act=dispMemberLoginForm"):
+			saveLog(self.site, '로봇체크를 우회하지 못했습니다.')
+			raise
 
 		try:
 			logout_btn = self.wait.until(
@@ -988,12 +978,9 @@ class CommunityMacro:
 
 
 	def busan_bibiki(self):
-		self.driver.get(self.url)
-
-		try:
-			self.click_verify()
-		except:
-			pass
+		if not self.click_verify(self.url):
+			saveLog(self.site, '로봇체크를 우회하지 못했습니다.')
+			raise
 
 		try:
 			logout_btn = self.wait.until(
@@ -1117,14 +1104,25 @@ class CommunityMacro:
 				saveLog(self.site, '글쓰기에 실패하였습니다.')
 	
 
-	def click_verify(self):
+	def click_verify(self, url):
+		self.driver.execute_script(f'''window.open("{url}","_blank");''') # open page in new tab
+		time.sleep(5) # wait until page has loaded
+		self.driver.switch_to.window(window_name=driver.window_handles[0])   # switch to first tab
+		self.driver.close() # close first tab
+		self.driver.switch_to.window(window_name=driver.window_handles[0] )  # switch back to new tab
+		time.sleep(2)
+		self.driver.get("https://google.com")
+		time.sleep(2)
+		self.driver.get(url) # this should pass cloudflare captchas now
+
 		time.sleep(10)
+
 
 		try:
 			iframe = self.wait.until(
 				EC.visibility_of_element_located((By.XPATH, "//iframe[@title='Widget containing a Cloudflare security challenge']"))
 			)
-			print(iframe)
+
 			self.driver.switch_to.frame(iframe)
 			checkbox = self.driver.find_element(
 				By.XPATH, '//*[@id="challenge-stage"]/div/label/span[2]',
@@ -1132,14 +1130,20 @@ class CommunityMacro:
 
 			if checkbox:
 				checkbox.click()
-			else:
-				print('없다')
+
 
 		except Exception as e:
 			print(e)
 		finally:
+			checkbox = self.driver.find_element(
+				By.XPATH, '//*[@id="challenge-stage"]/div/label/span[2]',
+			)
 			self.driver.switch_to.default_content()
-		time.sleep(5)
+			if checkbox:
+				return False
+			else:
+				return True
+			
 		
 
 
@@ -1441,3 +1445,4 @@ if __name__ == "__main__":
 
 	#작동 프레임 끝
 	root.mainloop()
+	
