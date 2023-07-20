@@ -1124,7 +1124,6 @@ class CommunityMacro:
 			iframe = self.wait.until(
 				EC.visibility_of_element_located((By.XPATH, "//iframe[@title='Widget containing a Cloudflare security challenge']"))
 			)
-			print(iframe)
 			self.driver.switch_to.frame(iframe)
 			checkbox = self.driver.find_element(
 				By.XPATH, '//*[@id="challenge-stage"]/div/label/span[2]',
@@ -1132,8 +1131,7 @@ class CommunityMacro:
 
 			if checkbox:
 				checkbox.click()
-			else:
-				print('없다')
+
 
 		except Exception as e:
 			print(e)
