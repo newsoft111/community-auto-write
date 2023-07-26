@@ -22,7 +22,7 @@ from threading import Thread
 from bs4 import BeautifulSoup
 import subprocess
 
-APP_VERSION = '0.22'
+APP_VERSION = '0.23'
 is_running = False
 session = requests.session()
 ori_session = ''
