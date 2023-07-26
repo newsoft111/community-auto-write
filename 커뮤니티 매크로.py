@@ -1119,7 +1119,9 @@ class CommunityMacro:
 	
 
 	def bypass_clould_flare(self):
-		time.sleep(10)
+		url = 'https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EB%8B%AC%EB%A6%AC%EA%B8%B0&newwindow=1&biw=1034&bih=868&sxsrf=AB5stBgdM36FWpNokVotpKVLo-1bc_EBZA%3A1690345303228&ei=V5_AZIzBDYf6hwP71IGgAw&ved=0ahUKEwjMyOL6wquAAxUH_WEKHXtqADQQ4dUDCA8&uact=5&oq=%EB%B6%80%EC%82%B0%EB%8B%AC%EB%A6%AC%EA%B8%B0&gs_lp=Egxnd3Mtd2l6LXNlcnAiD-u2gOyCsOuLrOumrOq4sEiSFlAAWIcVcAd4AZABApgBigGgAdYPqgEEMC4xN7gBA8gBAPgBAagCCsICBBAjGCfCAgsQABiABBixAxiDAcICBRAAGIAEwgIHEAAYgAQYCsICBxAAGIoFGEPCAg0QLhiKBRjHARjRAxhDwgIIEAAYgAQYsQPCAggQLhiABBixA8ICERAuGIAEGLEDGIMBGMcBGNEDwgILEC4YgAQYsQMYgwHCAgUQLhiABMICBBAAGAPCAggQLhixAxiABMICBxAjGOoCGCfCAgcQIxiKBRgn4gMEGAAgQYgGAQ&sclient=gws-wiz-serp'
+		self.driver.get(url)
+		'''time.sleep(10)
 
 		try:
 			iframe = self.wait.until(
@@ -1132,13 +1134,14 @@ class CommunityMacro:
 
 			if checkbox:
 				checkbox.click()
+			time.sleep(5)
 
 
 		except Exception as e:
-			print(e)
+			pass
 		finally:
-			self.driver.switch_to.default_content()
-		time.sleep(5)
+			self.driver.switch_to.default_content()'''
+		
 		
 
 
@@ -1200,18 +1203,22 @@ def startBotThread():
 
 
 if __name__ == "__main__":
+	#chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]  #크롬드라이버 버전 확인
+
 	subprocess.Popen(r'C:\Program Files\Google\Chrome\Application\chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\chrometemp"')
 
 	options = webdriver.ChromeOptions()
 	options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
 
-
 	driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-
 	
 	#driver = uc.Chrome(options=options,version_main=chrome_ver,use_subprocess=True)
 
 	driver.set_window_size(random.uniform(993,1300), random.uniform(700,1000))
+
+	url = 'https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EB%8B%AC%EB%A6%AC%EA%B8%B0&newwindow=1&biw=1034&bih=868&sxsrf=AB5stBgdM36FWpNokVotpKVLo-1bc_EBZA%3A1690345303228&ei=V5_AZIzBDYf6hwP71IGgAw&ved=0ahUKEwjMyOL6wquAAxUH_WEKHXtqADQQ4dUDCA8&uact=5&oq=%EB%B6%80%EC%82%B0%EB%8B%AC%EB%A6%AC%EA%B8%B0&gs_lp=Egxnd3Mtd2l6LXNlcnAiD-u2gOyCsOuLrOumrOq4sEiSFlAAWIcVcAd4AZABApgBigGgAdYPqgEEMC4xN7gBA8gBAPgBAagCCsICBBAjGCfCAgsQABiABBixAxiDAcICBRAAGIAEwgIHEAAYgAQYCsICBxAAGIoFGEPCAg0QLhiKBRjHARjRAxhDwgIIEAAYgAQYsQPCAggQLhiABBixA8ICERAuGIAEGLEDGIMBGMcBGNEDwgILEC4YgAQYsQMYgwHCAgUQLhiABMICBBAAGAPCAggQLhixAxiABMICBxAjGOoCGCfCAgcQIxiKBRgn4gMEGAAgQYgGAQ&sclient=gws-wiz-serp'
+	driver.get(url)
+	
 	
 	root=Tk()
 	root.tk.call('encoding', 'system', 'utf-8')
