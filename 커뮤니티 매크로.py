@@ -9,8 +9,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
 import chromedriver_autoinstaller
 import random, time, os, sys, csv
 from datetime import datetime, timedelta
@@ -22,7 +23,7 @@ from threading import Thread
 from bs4 import BeautifulSoup
 import subprocess
 
-APP_VERSION = '0.24'
+APP_VERSION = '0.25'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -1203,14 +1204,23 @@ def startBotThread():
 
 
 if __name__ == "__main__":
-	#chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]  #크롬드라이버 버전 확인
+	chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]  #크롬드라이버 버전 확인
 
 	subprocess.Popen(r'C:\Program Files\Google\Chrome\Application\chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\chrometemp"')
 
 	options = webdriver.ChromeOptions()
 	options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
 
-	driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+	try:
+		driver = webdriver.Chrome(f'./{chrome_ver}/chromedriver.exe', options = options)   
+	except:
+		try:
+			chromedriver_autoinstaller.install(True)
+			driver = webdriver.Chrome(f'./{chrome_ver}/chromedriver.exe', options = options)
+		except:
+			service = Service(executable_path=ChromeDriverManager(version="114.0.5735.90").install())
+			driver = webdriver.Chrome(service=service, options=options)
+
 	
 	#driver = uc.Chrome(options=options,version_main=chrome_ver,use_subprocess=True)
 
