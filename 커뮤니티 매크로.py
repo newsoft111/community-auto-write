@@ -9,7 +9,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
 import chromedriver_autoinstaller
 import random, time, os, sys, csv
 from datetime import datetime, timedelta
@@ -19,7 +20,7 @@ import shutil
 from cryptography.fernet import Fernet
 from threading import Thread
 from bs4 import BeautifulSoup
-
+import subprocess
 
 APP_VERSION = '0.22'
 is_running = False
@@ -1199,15 +1200,16 @@ def startBotThread():
 
 
 if __name__ == "__main__":
-	chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]
-
+	subprocess.Popen(r'C:\Program Files\Google\Chrome\Application\chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\chrometemp"')
 
 	options = webdriver.ChromeOptions()
-	options.add_argument('--incognito') # incognito 시크릿 모드입니다.
-	options.add_argument("--auto-open-devtools-for-tabs")
+	options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
+
+
+	driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
 	
-	driver = uc.Chrome(options=options,version_main=chrome_ver,use_subprocess=True)
+	#driver = uc.Chrome(options=options,version_main=chrome_ver,use_subprocess=True)
 
 	driver.set_window_size(random.uniform(993,1300), random.uniform(700,1000))
 	
