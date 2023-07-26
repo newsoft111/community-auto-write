@@ -22,7 +22,7 @@ from threading import Thread
 from bs4 import BeautifulSoup
 import subprocess
 
-APP_VERSION = '0.23'
+APP_VERSION = '0.24'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -465,12 +465,12 @@ class CommunityMacro:
 
 
 	def albam(self):
-		self.driver.get(f"{self.url}/index.php?mid=index&act=dispMemberLogout")
-
 		try:
 			self.bypass_clould_flare()
 		except:
 			pass
+
+		self.driver.get(f"{self.url}/index.php?mid=index&act=dispMemberLogout")
 
 		id_input = self.wait.until(
 			EC.visibility_of_element_located((By.XPATH, "//input[@name='user_id']"))
@@ -608,12 +608,12 @@ class CommunityMacro:
 	
 
 	def fun_choice(self):
-		self.driver.get(self.url)
-
 		try:
 			self.bypass_clould_flare()
 		except:
 			pass
+
+		self.driver.get(self.url)
 
 		try:
 			logout_btn = self.wait.until(
@@ -673,12 +673,12 @@ class CommunityMacro:
 
 
 	def busan_saliki(self):
-		self.driver.get(self.url)
-
 		try:
 			self.bypass_clould_flare()
 		except:
 			pass
+
+		self.driver.get(self.url)
 
 		try:
 			driver.execute_script("""
@@ -781,12 +781,12 @@ class CommunityMacro:
 
 
 	def busan_daliki(self):
-		self.driver.get(self.url+"/index.php?act=dispMemberLoginForm")
-
 		try:
 			self.bypass_clould_flare()
 		except:
 			pass
+
+		self.driver.get(self.url+"/index.php?act=dispMemberLoginForm")
 
 		try:
 			logout_btn = self.wait.until(
@@ -989,12 +989,12 @@ class CommunityMacro:
 
 
 	def busan_bibiki(self):
-		self.driver.get(self.url)
-
 		try:
 			self.bypass_clould_flare()
 		except:
 			pass
+
+		self.driver.get(self.url)
 
 		try:
 			logout_btn = self.wait.until(
