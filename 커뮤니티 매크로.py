@@ -23,7 +23,7 @@ from threading import Thread
 from bs4 import BeautifulSoup
 import subprocess
 
-APP_VERSION = '0.25'
+APP_VERSION = '0.26'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -467,8 +467,9 @@ class CommunityMacro:
 
 	def albam(self):
 		try:
-			self.bypass_clould_flare()
+			self.bypass_clould_flare(self.url)
 		except:
+			print('알밤')
 			pass
 
 		self.driver.get(f"{self.url}/index.php?mid=index&act=dispMemberLogout")
@@ -610,8 +611,9 @@ class CommunityMacro:
 
 	def fun_choice(self):
 		try:
-			self.bypass_clould_flare()
+			self.bypass_clould_flare(self.url)
 		except:
+			print('펀초이스')
 			pass
 
 		self.driver.get(self.url)
@@ -675,8 +677,9 @@ class CommunityMacro:
 
 	def busan_saliki(self):
 		try:
-			self.bypass_clould_flare()
+			self.bypass_clould_flare(self.url)
 		except:
+			print('부산살리기')
 			pass
 
 		self.driver.get(self.url)
@@ -783,8 +786,9 @@ class CommunityMacro:
 
 	def busan_daliki(self):
 		try:
-			self.bypass_clould_flare()
+			self.bypass_clould_flare(self.url)
 		except:
+			print("부산달리기")
 			pass
 
 		self.driver.get(self.url+"/index.php?act=dispMemberLoginForm")
@@ -991,7 +995,7 @@ class CommunityMacro:
 
 	def busan_bibiki(self):
 		try:
-			self.bypass_clould_flare()
+			self.bypass_clould_flare(self.url)
 		except:
 			pass
 
@@ -1119,9 +1123,30 @@ class CommunityMacro:
 				saveLog(self.site, '글쓰기에 실패하였습니다.')
 	
 
-	def bypass_clould_flare(self):
-		url = 'https://www.google.com/search?q=%EB%B6%80%EC%82%B0%EB%8B%AC%EB%A6%AC%EA%B8%B0&newwindow=1&biw=1034&bih=868&sxsrf=AB5stBgdM36FWpNokVotpKVLo-1bc_EBZA%3A1690345303228&ei=V5_AZIzBDYf6hwP71IGgAw&ved=0ahUKEwjMyOL6wquAAxUH_WEKHXtqADQQ4dUDCA8&uact=5&oq=%EB%B6%80%EC%82%B0%EB%8B%AC%EB%A6%AC%EA%B8%B0&gs_lp=Egxnd3Mtd2l6LXNlcnAiD-u2gOyCsOuLrOumrOq4sEiSFlAAWIcVcAd4AZABApgBigGgAdYPqgEEMC4xN7gBA8gBAPgBAagCCsICBBAjGCfCAgsQABiABBixAxiDAcICBRAAGIAEwgIHEAAYgAQYCsICBxAAGIoFGEPCAg0QLhiKBRjHARjRAxhDwgIIEAAYgAQYsQPCAggQLhiABBixA8ICERAuGIAEGLEDGIMBGMcBGNEDwgILEC4YgAQYsQMYgwHCAgUQLhiABMICBBAAGAPCAggQLhixAxiABMICBxAjGOoCGCfCAgcQIxiKBRgn4gMEGAAgQYgGAQ&sclient=gws-wiz-serp'
+	def bypass_clould_flare(self, keyword):
+		url = f'https://www.google.com/search?q={keyword}'
 		self.driver.get(url)
+		self.driver.find_element(
+			By.XPATH, '//*[@id="rso"]/div[1]/div/div/div[1]/div/a'
+		).click()
+
+
+		time.sleep(5)
+
+		current_window = self.driver.current_window_handle
+
+		# Get all window handles
+		all_windows = self.driver.window_handles
+
+		# Close all windows except the current one
+		for window in all_windows:
+			if window != current_window:
+				self.driver.switch_to.window(window)
+				self.driver.close()
+
+		# Switch back to the current window
+		self.driver.switch_to.window(current_window)
+
 		'''time.sleep(10)
 
 		try:
