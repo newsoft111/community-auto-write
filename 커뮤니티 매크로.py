@@ -23,7 +23,7 @@ from threading import Thread
 from bs4 import BeautifulSoup
 import subprocess
 
-APP_VERSION = '0.26'
+APP_VERSION = '0.29'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -418,7 +418,7 @@ class CommunityMacro:
 		self.subject = subject
 		self.content = content
 		self.url = community_site_dict[self.site]
-		self.wait = WebDriverWait(self.driver, 20)
+		self.wait = WebDriverWait(self.driver, 15)
 		self.is_first_loop = is_first_loop
 
 		try:
@@ -469,8 +469,8 @@ class CommunityMacro:
 		try:
 			self.bypass_clould_flare(self.url)
 		except:
-			print('알밤')
-			pass
+			saveLog(self.site, '로봇탐지 우회에 실패하였습니다.')
+			raise
 
 		self.driver.get(f"{self.url}/index.php?mid=index&act=dispMemberLogout")
 
@@ -613,8 +613,8 @@ class CommunityMacro:
 		try:
 			self.bypass_clould_flare(self.url)
 		except:
-			print('펀초이스')
-			pass
+			saveLog(self.site, '로봇탐지 우회에 실패하였습니다.')
+			raise
 
 		self.driver.get(self.url)
 
@@ -679,8 +679,8 @@ class CommunityMacro:
 		try:
 			self.bypass_clould_flare(self.url)
 		except:
-			print('부산살리기')
-			pass
+			saveLog(self.site, '로봇탐지 우회에 실패하였습니다.')
+			raise
 
 		self.driver.get(self.url)
 
@@ -788,8 +788,8 @@ class CommunityMacro:
 		try:
 			self.bypass_clould_flare(self.url)
 		except:
-			print("부산달리기")
-			pass
+			saveLog(self.site, '로봇탐지 우회에 실패하였습니다.')
+			raise
 
 		self.driver.get(self.url+"/index.php?act=dispMemberLoginForm")
 
@@ -997,7 +997,8 @@ class CommunityMacro:
 		try:
 			self.bypass_clould_flare(self.url)
 		except:
-			pass
+			saveLog(self.site, '로봇탐지 우회에 실패하였습니다.')
+			raise
 
 		self.driver.get(self.url)
 
@@ -1123,16 +1124,14 @@ class CommunityMacro:
 				saveLog(self.site, '글쓰기에 실패하였습니다.')
 	
 
-	def bypass_clould_flare(self, keyword):
-		url = f'https://www.google.com/search?q={keyword}'
+	def bypass_clould_flare(self, url):
 		self.driver.get(url)
-		self.driver.find_element(
-			By.XPATH, '//*[@id="rso"]/div[1]/div/div/div[1]/div/a'
-		).click()
-
-
-		time.sleep(10)
-
+		time.sleep(10) # wait until page has loaded
+		self.driver.execute_script("window.open('');") # open page in new tab
+		self.driver.switch_to.window(driver.window_handles[-1])
+		self.driver.get(url)
+		time.sleep(10) # wait until page has loaded
+		
 		current_window = self.driver.current_window_handle
 
 		# Get all window handles
@@ -1146,6 +1145,15 @@ class CommunityMacro:
 
 		# Switch back to the current window
 		self.driver.switch_to.window(current_window)
+
+		time.sleep(1)
+		driver.get("https://google.com")
+		time.sleep(1)
+		self.driver.get(url) # this should pass cloudflare captchas now
+		time.sleep(7)
+
+
+	
 
 		'''time.sleep(10)
 
@@ -1235,6 +1243,8 @@ if __name__ == "__main__":
 
 	options = webdriver.ChromeOptions()
 	options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
+	options.add_argument('--disable-popup-blocking')
+
 
 	try:
 		driver = webdriver.Chrome(f'./{chrome_ver}/chromedriver.exe', options = options)   
