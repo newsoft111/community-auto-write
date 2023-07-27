@@ -1131,7 +1131,7 @@ class CommunityMacro:
 		).click()
 
 
-		time.sleep(5)
+		time.sleep(10)
 
 		current_window = self.driver.current_window_handle
 
