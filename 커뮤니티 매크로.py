@@ -22,8 +22,10 @@ from cryptography.fernet import Fernet
 from threading import Thread
 from bs4 import BeautifulSoup
 import subprocess
+import pyautogui
+import pyperclip
 
-APP_VERSION = '0.29'
+APP_VERSION = '0.30'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -1126,41 +1128,15 @@ class CommunityMacro:
 
 	def bypass_clould_flare(self, url):
 		self.driver.get(url)
-		time.sleep(10) # wait until page has loaded
-		self.driver.execute_script("window.open('');") # open page in new tab
-		self.driver.switch_to.window(driver.window_handles[-1])
-		self.driver.get(url)
-		time.sleep(10) # wait until page has loaded
-		
-		current_window = self.driver.current_window_handle
 
-		# Get all window handles
-		all_windows = self.driver.window_handles
-
-		# Close all windows except the current one
-		for window in all_windows:
-			if window != current_window:
-				self.driver.switch_to.window(window)
-				self.driver.close()
-
-		# Switch back to the current window
-		self.driver.switch_to.window(current_window)
-
-		time.sleep(1)
-		driver.get("https://google.com")
-		time.sleep(1)
-		self.driver.get(url) # this should pass cloudflare captchas now
-		time.sleep(7)
-
-
-	
-
-		'''time.sleep(10)
-
+		is_detected = False
 		try:
 			iframe = self.wait.until(
 				EC.visibility_of_element_located((By.XPATH, "//iframe[@title='Widget containing a Cloudflare security challenge']"))
 			)
+
+			is_detected = True
+
 			self.driver.switch_to.frame(iframe)
 			checkbox = self.driver.find_element(
 				By.XPATH, '//*[@id="challenge-stage"]/div/label/span[2]',
@@ -1174,7 +1150,36 @@ class CommunityMacro:
 		except Exception as e:
 			pass
 		finally:
-			self.driver.switch_to.default_content()'''
+			self.driver.switch_to.default_content()
+
+
+		if is_detected:
+			pyautogui.hotkey('ctrl', 't')
+			time.sleep(1)
+			pyperclip.copy(url)
+			pyautogui.hotkey('ctrl','v')
+			time.sleep(1)
+			pyautogui.press('enter')
+			time.sleep(10) # wait until page has loaded
+			
+			self.driver.switch_to.window(driver.window_handles[-1])
+
+			current_window = self.driver.current_window_handle
+
+			# Get all window handles
+			all_windows = self.driver.window_handles
+
+			# Close all windows except the current one
+			for window in all_windows:
+				if window != current_window:
+					self.driver.switch_to.window(window)
+					self.driver.close()
+
+			# Switch back to the current window
+			self.driver.switch_to.window(current_window)
+
+
+		
 		
 		
 
@@ -1243,7 +1248,7 @@ if __name__ == "__main__":
 
 	options = webdriver.ChromeOptions()
 	options.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
-	options.add_argument('--disable-popup-blocking')
+	#options.add_argument('--incognito')
 
 
 	try:
