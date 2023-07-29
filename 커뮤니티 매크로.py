@@ -25,7 +25,7 @@ import subprocess
 import pyautogui
 import pyperclip
 
-APP_VERSION = '0.30'
+APP_VERSION = '0.31'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -1131,11 +1131,15 @@ class CommunityMacro:
 
 		is_detected = False
 		try:
-			iframe = self.wait.until(
-				EC.visibility_of_element_located((By.XPATH, "//iframe[@title='Widget containing a Cloudflare security challenge']"))
+			self.wait.until(
+				EC.visibility_of_element_located((By.XPATH, '//*[@id="challenge-running"]'))
 			)
 
 			is_detected = True
+
+			iframe = self.driver.find_element(
+				By.XPATH, "//iframe[@title='Widget containing a Cloudflare security challenge']"
+			)
 
 			self.driver.switch_to.frame(iframe)
 			checkbox = self.driver.find_element(
