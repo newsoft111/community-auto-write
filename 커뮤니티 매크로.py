@@ -1136,6 +1136,7 @@ class CommunityMacro:
 			)
 
 			is_detected = True
+			time.sleep(10)
 
 			iframe = self.driver.find_element(
 				By.XPATH, "//iframe[@title='Widget containing a Cloudflare security challenge']"
