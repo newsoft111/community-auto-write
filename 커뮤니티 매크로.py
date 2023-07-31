@@ -25,7 +25,7 @@ import subprocess
 import pyautogui
 import pyperclip
 
-APP_VERSION = '0.32'
+APP_VERSION = '0.33'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -1136,29 +1136,13 @@ class CommunityMacro:
 			)
 
 			is_detected = True
-			time.sleep(10)
-
-			iframe = self.driver.find_element(
-				By.XPATH, "//iframe[@title='Widget containing a Cloudflare security challenge']"
-			)
-
-			self.driver.switch_to.frame(iframe)
-			checkbox = self.driver.find_element(
-				By.XPATH, '//*[@id="challenge-stage"]/div/label/span[2]',
-			)
-
-			if checkbox:
-				checkbox.click()
-			time.sleep(5)
-
-
-		except Exception as e:
+		except:
 			pass
-		finally:
-			self.driver.switch_to.default_content()
 
+		time.sleep(1)
 
 		if is_detected:
+			
 			pyautogui.hotkey('ctrl', 't')
 			time.sleep(1)
 			pyperclip.copy(url)
@@ -1168,6 +1152,25 @@ class CommunityMacro:
 			time.sleep(10) # wait until page has loaded
 			
 			self.driver.switch_to.window(driver.window_handles[-1])
+
+			try:
+				iframe = self.driver.find_element(
+					By.XPATH, "//iframe[@title='Widget containing a Cloudflare security challenge']"
+				)
+
+				self.driver.switch_to.frame(iframe)
+				checkbox = self.driver.find_element(
+					By.XPATH, '//*[@id="challenge-stage"]/div/label/span[2]',
+				)
+
+				if checkbox:
+					checkbox.click()
+				time.sleep(5)
+
+
+			
+			finally:
+				self.driver.switch_to.default_content()
 
 			current_window = self.driver.current_window_handle
 
