@@ -25,7 +25,7 @@ import subprocess
 import pyautogui
 import pyperclip
 
-APP_VERSION = '0.33'
+APP_VERSION = '0.34'
 is_running = False
 session = requests.session()
 ori_session = ''
