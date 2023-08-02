@@ -1172,19 +1172,19 @@ class CommunityMacro:
 			finally:
 				self.driver.switch_to.default_content()
 
-			current_window = self.driver.current_window_handle
+		current_window = self.driver.current_window_handle
 
-			# Get all window handles
-			all_windows = self.driver.window_handles
+		# Get all window handles
+		all_windows = self.driver.window_handles
 
-			# Close all windows except the current one
-			for window in all_windows:
-				if window != current_window:
-					self.driver.switch_to.window(window)
-					self.driver.close()
+		# Close all windows except the current one
+		for window in all_windows:
+			if window != current_window:
+				self.driver.switch_to.window(window)
+				self.driver.close()
 
-			# Switch back to the current window
-			self.driver.switch_to.window(current_window)
+		# Switch back to the current window
+		self.driver.switch_to.window(current_window)
 
 
 		
