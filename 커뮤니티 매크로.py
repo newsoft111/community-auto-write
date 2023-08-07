@@ -25,7 +25,7 @@ import subprocess
 import pyautogui
 import pyperclip
 
-APP_VERSION = '0.34'
+APP_VERSION = '0.35'
 is_running = False
 session = requests.session()
 ori_session = ''
@@ -1002,15 +1002,9 @@ class CommunityMacro:
 			saveLog(self.site, '로봇탐지 우회에 실패하였습니다.')
 			raise
 
-		self.driver.get(self.url)
+		self.driver.get(f"{self.url}/bbs/logout.php")
 
-		try:
-			logout_btn = self.wait.until(
-				EC.visibility_of_element_located((By.XPATH, '//*[@id="nt_body"]/div/div/div[2]/div[1]/div/div[2]/a[4]'))
-			)
-			logout_btn.click()
-		except:
-			pass
+		
 
 
 		id_input = self.wait.until(
